@@ -1,6 +1,9 @@
 import React from 'react';
-
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { books } from '../actions';
 import { categories } from '../category';
+import createBook from '../actions/books';
 
 function BooksForm() {
   const [formData, setFormData] = React.useState({ title: '', category: '' });
@@ -13,6 +16,8 @@ function BooksForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    createBook(formData);
+    setFormData({ title: '', category: '' });
   };
   return (
     <form onSubmit={handleSubmit}>
@@ -58,4 +63,8 @@ function BooksForm() {
   );
 }
 
-export default BooksForm;
+const mapDispatchToProps = (dispatch) => (
+  bindActionCreators({ createBook: books.createBook }, dispatch)
+);
+
+export default connect(null, mapDispatchToProps)(BooksForm);
