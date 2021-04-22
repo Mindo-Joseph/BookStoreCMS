@@ -1,5 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import Book from '../components/Book';
 
 function BooksList({ books }) {
   return (
@@ -11,9 +13,21 @@ function BooksList({ books }) {
           <th>Category</th>
         </tr>
       </thead>
+      <tbody>
+        {books.map((book) => (
+          <Book key={book.id} id={book.id} title={book.title} category={book.cateogory} />
+        ))}
+      </tbody>
     </table>
   );
 }
+BooksList.propTypes = {
+  books: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+    title: PropTypes.string.isRequired,
+    category: PropTypes.string.isRequired,
+  })).isRequired,
+};
 
 const mapStateToProps = (state) => ({ books: state.books });
 
