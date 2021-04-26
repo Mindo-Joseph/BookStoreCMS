@@ -15,8 +15,9 @@ function BooksList({ books }) {
       </thead>
       <tbody>
         {books.map((book) => (
-          <Book key={book.id} id={book.id} title={book.title} category={book.category} />
+          <Book key={book.id} book={book} />
         ))}
+        {console.log(books)}
       </tbody>
     </table>
   );
@@ -30,5 +31,4 @@ BooksList.propTypes = {
 };
 
 const mapStateToProps = (state) => ({ books: state.books });
-
 export default connect(mapStateToProps)(BooksList);
