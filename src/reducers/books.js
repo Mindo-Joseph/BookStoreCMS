@@ -10,9 +10,10 @@ export const INITIAL_STATE = [
 
 const booksReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case books.CREATE_BOOK:
+    case books.TYPES.CREATE_BOOK:
       return [...state, action.payload];
-    case books.REMOVE_BOOK:
+
+    case books.TYPES.REMOVE_BOOK:
       return state.filter(({ id }) => id !== action.payload.id);
     default:
       return state;
