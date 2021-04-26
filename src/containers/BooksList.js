@@ -1,9 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { bindActionCreators } from 'redux';
 import Book from '../components/Book';
+import { books } from '../actions';
 
-function BooksList({ books }) {
+function BooksList({ books, removeBook }) {
   return (
     <table>
       <thead>
@@ -15,20 +17,32 @@ function BooksList({ books }) {
       </thead>
       <tbody>
         {books.map((book) => (
-          <Book key={book.id} id={book.id} title={book.title} category={book.category} />
+          <Book
+            key={book.id}
+            book={book}
+            handleBookRemoval={() => removeBook(book)}
+          />
         ))}
       </tbody>
     </table>
   );
 }
 BooksList.propTypes = {
-  books: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
-    title: PropTypes.string.isRequired,
-    category: PropTypes.string.isRequired,
-  })).isRequired,
+  books: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+      title: PropTypes.string.isRequired,
+      category: PropTypes.string.isRequired,
+
+    }),
+  ).isRequired,
+  removeBook: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({ books: state.books });
-
-export default connect(mapStateToProps)(BooksList);
+const mapDispatchToProps = (dispatch) => (
+  bindActionCreators({
+    removeBook: books.removeBook,
+  }, dispatch)
+);
+export default connect(mapStateToProps, mapDispatchToProps)(BooksList);

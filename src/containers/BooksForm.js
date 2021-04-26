@@ -1,11 +1,11 @@
 import React from 'react';
 import { bindActionCreators } from 'redux';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { books } from '../actions';
 import { categories } from '../category';
-import createBook from '../actions/books';
 
-function BooksForm() {
+function BooksForm({ createBook }) {
   const [formData, setFormData] = React.useState({ title: '', category: '' });
   const handleChange = (e) => {
     setFormData((formData) => ({
@@ -62,9 +62,11 @@ function BooksForm() {
     </form>
   );
 }
+BooksForm.propTypes = {
+  createBook: PropTypes.func.isRequired,
+};
 
 const mapDispatchToProps = (dispatch) => (
   bindActionCreators({ createBook: books.createBook }, dispatch)
 );
-
 export default connect(null, mapDispatchToProps)(BooksForm);

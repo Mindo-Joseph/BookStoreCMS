@@ -1,20 +1,20 @@
-import * as types from './actionTypes';
+export const TYPES = {
+  CREATE_BOOK: 'CREATE_BOOK',
+  REMOVE_BOOK: 'REMOVE_BOOK',
+};
 
-let counter = 1;
-export default function createBook(book) {
-  counter += 1;
-
+export function createBook(book) {
   return ({
-    type: types.CREATE_BOOK,
+    type: TYPES.CREATE_BOOK,
     payload: {
       ...book,
-      id: counter,
+      id: Math.ceil(Math.random() * 100),
     },
   });
 }
 export function removeBook(book) {
   return ({
-    type: types.REMOVE_BOOK,
+    type: TYPES.REMOVE_BOOK,
     payload: { id: book.id },
   });
 }
