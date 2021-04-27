@@ -3,28 +3,37 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import Book from '../components/Book';
-import { books } from '../actions';
+import CategoryFilter from '../components/CategoryFilter';
 
-function BooksList({ books, removeBook }) {
+import { books, filter } from '../actions';
+
+function BooksList({
+  books, removeBook, filter, changeFilter,
+}) {
   return (
-    <table>
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Title</th>
-          <th>Category</th>
-        </tr>
-      </thead>
-      <tbody>
-        {books.map((book) => (
-          <Book
-            key={book.id}
-            book={book}
-            handleBookRemoval={() => removeBook(book)}
-          />
-        ))}
-      </tbody>
-    </table>
+    <>
+      <CategoryFilter handleFilterChange={changeFilter} filter={filter} />
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Category</th>
+          </tr>
+        </thead>
+        <tbody>
+          { books.length
+            ? books.map((book) => (
+              <Book
+                key={book.id}
+                book={book}
+                handleBookRemoval={() => removeBook(book)}
+              />
+            ))
+            : <tr><td colSpan={3}>No books were found</td></tr> }
+        </tbody>
+      </table>
+    </>
   );
 }
 BooksList.propTypes = {
@@ -37,12 +46,25 @@ BooksList.propTypes = {
     }),
   ).isRequired,
   removeBook: PropTypes.func.isRequired,
+  changeFilter: PropTypes.func.isRequired,
+  filter: PropTypes.string.isRequired,
 };
 
-const mapStateToProps = (state) => ({ books: state.books });
+const getFilteredBooks = ({ books, filter }) => {
+  if (filter === 'All') {
+    return books;
+  }
+  return books.filter(({ category }) => category === filter);
+};
+
+const mapStateToProps = (state) => ({
+  books: getFilteredBooks(state),
+  filter: state.filter,
+});
 const mapDispatchToProps = (dispatch) => (
   bindActionCreators({
     removeBook: books.removeBook,
+    changeFilter: filter.changeFilter,
   }, dispatch)
 );
 export default connect(mapStateToProps, mapDispatchToProps)(BooksList);
