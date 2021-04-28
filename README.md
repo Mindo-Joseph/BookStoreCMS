@@ -12,8 +12,7 @@
 
 
 ## About the Project
-
-**To be added**
+![screenshot](public/screenshot.png)
 
 
 This project is a Bookstore content management system built using React & Redux
